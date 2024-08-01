@@ -1,13 +1,11 @@
 package main
 
 import (
-	"fmt"
-	"strings"
 	"time"
 )
 
 type task struct {
-	sn            int
+	sn            float64
 	name          string
 	description   string
 	status        string
@@ -16,10 +14,10 @@ type task struct {
 }
 
 // create new task
-func newTask(name string) task {
+func newTask(name string, sn float64) task {
 
 	task := task{
-		sn:            1,
+		sn:            sn,
 		name:          name,
 		description:   "Pending Description",
 		status:        "Not started",
@@ -28,6 +26,21 @@ func newTask(name string) task {
 	}
 
 	return task
+}
+
+// update descriptiom
+func (task *task) updateDescription(desciption string) {
+	task.description = desciption
+}
+
+// update status
+func (task *task) updateStatus(status string) {
+	task.status = status
+}
+
+// update timeCompleted
+func (task *task) updateTimeCompleted(time string) {
+	task.timeCompleted = time
 }
 
 // format task
@@ -40,34 +53,4 @@ func (task task) format() string {
 	fs := formatAsTable(task)
 
 	return fs
-}
-
-func formatAsTable(task task) string {
-	// Define column widths (adjust as needed)
-	snWidth := 5
-	nameWidth := 20
-	descWidth := 30
-	statusWidth := 10
-	timeWidth := 16
-
-	// Build the header row with padding
-	header := fmt.Sprintf("| %-*s | %-*s | %-*s | %-*s | %-*s | %-*s |\n",
-		snWidth, "SN",
-		nameWidth, "Name",
-		descWidth, "Description",
-		statusWidth, "Status",
-		timeWidth, "Time Created",
-		timeWidth, "Time Completed")
-
-	// Build the data row with padding
-	dataRow := fmt.Sprintf("| %-*v | %-*s | %-*s | %-*s | %-*s | %-*s |\n",
-		snWidth, task.sn,
-		nameWidth, task.name,
-		descWidth, task.description,
-		statusWidth, task.status,
-		timeWidth, task.timeCreated,
-		timeWidth, task.timeCompleted)
-
-	// Combine header and data row with a separator line
-	return header + strings.Repeat("-", len(header)) + "\n" + dataRow
 }
