@@ -21,15 +21,6 @@ func formatAsTable(task task) string {
 	statusWidth := len(task.status)
 	timeWidth := len(task.timeCreated)
 
-	// Build the header row with padding
-	header := fmt.Sprintf("| %-*s | %-*s | %-*s | %-*s | %-*s | %-*s |\n",
-		snWidth, "SN",
-		nameWidth, "Name",
-		descWidth, "Description",
-		statusWidth, "Status",
-		timeWidth, "Time Created",
-		timeWidth, "Time Completed")
-
 	// Build the data row with padding
 	dataRow := fmt.Sprintf("| %-*v | %-*s | %-*s | %-*s | %-*s | %-*s |\n",
 		snWidth, task.sn,
@@ -39,6 +30,6 @@ func formatAsTable(task task) string {
 		timeWidth, task.timeCreated,
 		timeWidth, task.timeCompleted)
 
-	// Combine header and data row with a separator line
-	return header + strings.Repeat("-", len(header)) + "\n" + dataRow
+	// Return the formatted data
+	return dataRow
 }

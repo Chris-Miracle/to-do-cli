@@ -7,25 +7,25 @@ import (
 	"time"
 )
 
-func createTask() task {
+func createTask(taskList []task) []task {
 	reader := bufio.NewReader(os.Stdin)
 
 	name, _ := getInput("Give your task a name: ", reader)
 
-	var sn float64 = 0
-
-	if sn != 0 {
-		sn++
-	} else {
-		sn = 1
-	}
+	var sn float64 = float64(len(taskList) + 1)
 
 	task := newTask(name, sn)
 	fmt.Println(task.name, "- Task Created")
 
+	// Create task details
 	task = promptOptions(task)
 
-	return task
+	// add task to a list
+	taskList = append(taskList, task)
+
+	taskOptions(taskList, reader)
+
+	return taskList
 }
 
 func promptOptions(task task) task {
@@ -39,10 +39,6 @@ func promptOptions(task task) task {
 	fmt.Println("Task Details Created!")
 
 	return task
-	// opt, _ := getInput("Select Option (A - Save Task to File, B - Create New Task, C - Update An Existing Task, D - Exit): ", reader)
-
-	// fmt.Println(opt)
-	// taskOptions()
 }
 
 func statusOptions(task task, reader *bufio.Reader) task {
@@ -68,7 +64,26 @@ func statusOptions(task task, reader *bufio.Reader) task {
 	return task
 }
 
+func taskOptions(taskList []task, reader *bufio.Reader) {
+	opt, _ := getInput("Select Option (A - Save Task to File, B - Create New Task, C - Update An Existing Task): ", reader)
+
+	switch opt {
+	case "A":
+		saveToFile(taskList, taskList[0].name)
+		break
+	case "B":
+		createTask(taskList)
+		break
+	case "C":
+		fmt.Println("We are working on it")
+		break
+	default:
+		fmt.Println("That was not a valid option ...")
+		taskOptions(taskList, reader)
+	}
+}
+
 func main() {
-	task := createTask()
-	fmt.Print(task.format())
+	var taskList []task
+    taskList = createTask(taskList)
 }
